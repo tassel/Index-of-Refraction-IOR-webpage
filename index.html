@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Index of Refraction (IOR)</title>
+    <style>
+        /* General Styles */
+        body {
+            background-color: #1e1e2f;
+            color: #e5e5e5;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 24px;
+        }
+        h1 {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        p {
+            font-size: 1rem;
+            color: #9ca3af;
+        }
+        input {
+            margin-top: 16px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 50%;
+            color: #9ca3af;
+            background-color: #1f2937;
+            border: none;
+            outline: none;
+            font-size: 1rem;
+            box-shadow: 0 0 0 1px #4b5563;
+        }
+        input::placeholder{
+            color: #9ca3af;
+        }
+        input:focus {
+            box-shadow: 0 0 0 2px #6366f1;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .space > * + * {
+            margin-top: 16px;
+        }
+        .hidden {
+            display: none;
+        }
+
+        /* Category Styles */
+        .category-header {
+            cursor: pointer;
+            background-color: #2a2a3b;
+            padding: 8px 16px;
+            font-weight: bold;
+            font-size: 1rem;
+            color: #d1d5db;
+            border: 1px solid #4b5563;
+            border-radius: 8px 8px 0 0;
+            transition: background-color 0.3s;
+        }
+        .category-header:hover {
+            background-color: #343450;
+        }
+        .category-content {
+            background-color: #111827;
+            padding: 16px;
+            border: 1px solid #4b5563;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+        }
+        .category-content div {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.875rem;
+            color: #9ca3af;
+            padding: 4px 0;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+        .margin-bottom {
+            margin-bottom: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="text-center margin-bottom">
+            <h1>Index of Refraction (IOR)</h1>
+            <p>Explore IOR values for various materials</p>
+            <input id="search" type="text" placeholder="Search materials...">
+        </header>
+
+        <div id="materials-container" class="space">
+            <!-- Categories will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <script>
+        const materials = {
+            A: [
+                { name: "Acetone", range: "1.360" },
+                { name: "Acrylic glass", range: "1.490 - 1.492" },
+                { name: "Actinolite", range: "1.618" },
+                { name: "Agalmatoite", range: "1.550" },
+                { name: "Agate", range: "1.544 - 1.553" },
+                { name: "Agate, Moss", range: "1.540" },
+                { name: "Air", range: "1.000" },
+                { name: "Alcohol", range: "1.329" },
+                { name: "Alcohol, Ethyl (grain)", range: "1.360" },
+                { name: "Alcohol, Methyl (wood)", range: "1.329" },
+                { name: "Alexandrite", range: "1.746 - 1.755" },
+                { name: "Almandine", range: "1.244" },
+                { name: "Aluminum", range: "1.244" },
+                { name: "Aluminum Chloride", range: "2.700" },
+                { name: "Aluminum Oxide", range: "1.665" },
+                { name: "Amber", range: "1.539 - 1.546" },
+                { name: "Amblygonite", range: "1.611" },
+                { name: "Amethyst", range: "1.532 - 1.554" },
+                { name: "Ammolite", range: "1.520 - 1.680" },
+                { name: "Amorphous Selenium", range: "2.920" },
+                { name: "Anatase", range: "2.490" },
+                { name: "Andalusite", range: "1.629 - 1.650" },
+                { name: "Anhydrite", range: "1.571" },
+                { name: "Apatite", range: "1.420 - 1.632" },
+                { name: "Apophyllite", range: "1.536" },
+                { name: "Aquamarine", range: "1.567" },
+                { name: "Aragonite", range: "1.530" },
+                { name: "Argon", range: "1.000" },
+                { name: "Argonite", range: "1.530" },
+                { name: "Asphalt", range: "1.635" },
+                { name: "Augelite", range: "1.574" },
+                { name: "Axenite", range: "1.674 - 1.704" },
+                { name: "Axinite", range: "1.675" },
+                { name: "Azurite", range: "1.730" },
+            ],
+            B: [
+                { name: "Barite", range: "1.636" },
+                { name: "Barytocalcite", range: "1.684" },
+                { name: "Beer", range: "1.345" },
+                { name: "Benitoite", range: "1.757" },
+                { name: "Benzene", range: "1.501" },
+                { name: "Beryl", range: "1.570 - 1.600" },
+                { name: "Beryl, Red", range: "1.570 - 1.598" },
+                { name: "Beryllonite", range: "1.553" },
+                { name: "Borax", range: "1.446" },
+                { name: "Brazilianite", range: "1.603" },
+                { name: "Bromine (liquid)", range: "1.661" },
+                { name: "Bronze", range: "1.180" },
+                { name: "Brownite", range: "1.567" },
+            ],
+            C: [
+                { name: "Calcite", range: "1.486" },
+                { name: "Calspar", range: "1.486 - 1.660" },
+                { name: "Cancrinite", range: "1.491" },
+                { name: "Carbon Dioxide", range: "1.000" },
+                { name: "Carbon Disulfide", range: "1.628" },
+                { name: "Carbon Tetrachloride", range: "1.460" },
+                { name: "Carbonated Beverages", range: "1.340" },
+                { name: "Cassiterite", range: "1.997" },
+                { name: "Celestite", range: "1.622" },
+                { name: "Cerussite", range: "1.804" },
+                { name: "Ceylanite", range: "1.770" },
+                { name: "Chalcedony", range: "1.544 - 1.553" },
+                { name: "Chalk", range: "1.510" },
+                { name: "Chalybite", range: "1.630" },
+                { name: "Chlorine (gas)", range: "1.001" },
+                { name: "Chlorine (liquid)", range: "1.385" },
+                { name: "Chrome Green", range: "2.400" },
+                { name: "Chrome Red", range: "2.420" },
+                { name: "Chrome Tourmaline", range: "1.610 - 1.640" },
+                { name: "Chrome Yellow", range: "2.310" },
+                { name: "Chromium", range: "2.970" },
+                { name: "Chromium Oxide", range: "2.705" },
+                { name: "Chrysoberyl", range: "1.745" },
+                { name: "Chrysocolla", range: "1.500" },
+                { name: "Chrysoprase", range: "1.534" },
+                { name: "Cinnabar (Mercury Sulfide)", range: "3.020" },
+                { name: "Citrine", range: "1.532" },
+                { name: "Cleaner (all purpose)", range: "1.293" },
+                { name: "Clinohumite", range: "1.625" },
+                { name: "Clinozoisite", range: "1.724" },
+                { name: "Cobalt Blue", range: "1.740" },
+                { name: "Cobalt Green", range: "1.970" },
+                { name: "Cobalt Violet", range: "1.710" },
+                { name: "Colemanite", range: "1.586" },
+                { name: "Copper", range: "1.100 - 2.430" },
+                { name: "Copper Oxide", range: "2.705" },
+                { name: "Coral", range: "1.486" },
+                { name: "Cordierite", range: "1.540" },
+                { name: "Corundum", range: "1.766" },
+                { name: "Cranberry Juice (25%)", range: "1.351" },
+                { name: "Crocoite", range: "2.310" },
+                { name: "Cromite", range: "2.160" },
+                { name: "Crown Glass (impure)", range: "1.485 - 1.755" },
+                { name: "Crown Glass (pure)", range: "1.500 - 1.540" },
+                { name: "Cryolite", range: "1.338" },
+                { name: "Crysoberyl, Catseye", range: "1.746 - 1.755" },
+                { name: "Crystal", range: "2.000" },
+                { name: "Cubic Zirconia", range: "2.150 - 2.180" },
+                { name: "Cuprite", range: "2.850" },
+            ],
+            D: [
+                { name: "Danburite", range: "1.627 - 1.641" },
+                { name: "Diamond", range: "2.418" },
+                { name: "Diopside", range: "1.680" },
+                { name: "Dolomite", range: "1.503" },
+                { name: "Dumortierite", range: "1.686" },
+            ],
+            E: [
+                { name: "Ebonite", range: "1.660" },
+                { name: "Ekanite", range: "1.600" },
+                { name: "Elaeolite", range: "1.532" },
+                { name: "Emerald", range: "1.560 - 1.605" },
+                { name: "Emerald Catseye", range: "1.560 - 1.605" },
+                { name: "Emerald, Synth Flux", range: "1.561" },
+                { name: "Emerald, Synth Hydro", range: "1.568" },
+                { name: "Enstatite", range: "1.663" },
+                { name: "Epidote", range: "1.733" },
+                { name: "Ethanol", range: "1.360" },
+                { name: "Ethyl Alcohol", range: "1.360" },
+                { name: "Euclase", range: "1.652" },
+                { name: "Eye, Aqueous Humor", range: "1.330" },
+                { name: "Eye, Cornea", range: "1.380" },
+                { name: "Eye, Lens", range: "1.410" },
+                { name: "Eye, Vitreous Humor", range: "1.340" },
+            ],
+            F: [
+                { name: "Fabulite", range: "2.409" },
+                { name: "Feldspar, Adventurine", range: "1.532" },
+                { name: "Feldspar, Albite", range: "1.525" },
+                { name: "Feldspar, Amazonite", range: "1.525" },
+                { name: "Feldspar, Labrodorite", range: "1.565" },
+                { name: "Feldspar, Microcline", range: "1.525" },
+                { name: "Feldspar, Oligoclase", range: "1.539" },
+                { name: "Feldspar, Orthoclase", range: "1.525" },
+                { name: "Flint Glass (impure)", range: "1.523 - 1.925" },
+                { name: "Flint Glass (pure)", range: "1.600 - 1.620" },
+                { name: "Flourite", range: "1.433" },
+                { name: "Fluoride", range: "1.560" },
+                { name: "Fluorite", range: "1.434" },
+                { name: "Formica", range: "1.470" },
+                { name: "Fused Quartz", range: "1.460" },
+            ],
+            G: [
+                { name: "Gallium(III) Arsenide", range: "3.927" },
+                { name: "Gallium(III) Phosphide", range: "3.500" },
+                { name: "Garnet, Almandine", range: "1.760" },
+                { name: "Garnet, Almandite", range: "1.790" },
+                { name: "Garnet, Andradite", range: "1.820" },
+                { name: "Garnet, Demantiod", range: "1.880 - 1.900" },
+                { name: "Garnet, Grossular", range: "1.720 - 1.800" },
+                { name: "Garnet, Hessonite", range: "1.745" },
+                { name: "Garnet, Mandarin", range: "1.790 - 1.800" },
+                { name: "Garnet, Pyrope", range: "1.730 - 1.760" },
+                { name: "Garnet, Rhodolite", range: "1.740 - 1.770" },
+                { name: "Garnet, Spessartite", range: "1.810" },
+                { name: "Garnet, Tsavorite", range: "1.739 - 1.744" },
+                { name: "Garnet, Uvarovite", range: "1.740 - 1.870" },
+                { name: "Gaylussite", range: "1.517" },
+                { name: "Glass", range: "1.500" },
+                { name: "Glass, Albite", range: "1.489" },
+                { name: "Glass, Arsenic Trisulfide", range: "2.040" },
+                { name: "Glass, Crown", range: "1.520" },
+                { name: "Glass, Crown, Zinc", range: "1.517" },
+                { name: "Glass, Flint, 29% lead", range: "1.569" },
+                { name: "Glass, Flint, 55% lead", range: "1.669" },
+                { name: "Glass, Flint, 71% lead", range: "1.805" },
+                { name: "Glass, Flint, Dense", range: "1.660" },
+                { name: "Glass, Flint, Heaviest", range: "1.890" },
+                { name: "Glass, Flint, Heavy", range: "1.655" },
+                { name: "Glass, Flint, Lanthanum", range: "1.800" },
+                { name: "Glass, Flint, Light", range: "1.580" },
+                { name: "Glass, Flint, Medium", range: "1.627" },
+                { name: "Glass, Fused Silica", range: "1.459" },
+                { name: "Glass, Pyrex", range: "1.474" },
+                { name: "Glycerine", range: "1.473" },
+                { name: "Glycerol", range: "1.473" },
+                { name: "Gold", range: "0.470" },
+                { name: "Gypsium", range: "1.519" },
+            ],
+            H: [
+                { name: "Hambergite", range: "1.559" },
+                { name: "Hauyn", range: "1.490 - 1.505" },
+                { name: "Hauynite", range: "1.502" },
+                { name: "Heaviest Flint Glass", range: "1.890" },
+                { name: "Heavy Flint Glass", range: "1.650" },
+                { name: "Helium", range: "1.000" },
+                { name: "Hematite", range: "2.940" },
+                { name: "Hemimorphite", range: "1.614" },
+                { name: "Hiddenite", range: "1.655" },
+                { name: "Honey, 13% water content", range: "1.504" },
+                { name: "Honey, 17% water content", range: "1.494" },
+                { name: "Honey, 21% water content", range: "1.484" },
+                { name: "Howlite", range: "1.586" },
+                { name: "Hydrogen (gas)", range: "1.000" },
+                { name: "Hydrogen (liquid)", range: "1.097" },
+                { name: "Hypersthene", range: "1.670" },
+            ],
+            I: [
+                { name: "Ice", range: "1.309" },
+                { name: "Idocrase", range: "1.713" },
+                { name: "Iodine Crystal", range: "3.340" },
+                { name: "Iolite", range: "1.522 - 1.578" },
+                { name: "Iron", range: "2.950" },
+                { name: "Ivory", range: "1.540" },
+            ],
+            J: [
+                { name: "Jade, Jadeite", range: "1.640 - 1.667" },
+                { name: "Jade, Nephrite", range: "1.600 - 1.641" },
+                { name: "Jadeite", range: "1.665" },
+                { name: "Jasper", range: "1.540" },
+                { name: "Jet", range: "1.660" },
+            ],
+            K: [
+                { name: "Kornerupine", range: "1.665" },
+                { name: "Kunzite", range: "1.660 - 1.676" },
+                { name: "Kyanite", range: "1.715" },
+            ],
+            L: [
+                { name: "Labradorite", range: "1.560 - 1.572" },
+                { name: "Lapis Gem", range: "1.500" },
+                { name: "Lapis Lazuli", range: "1.500 - 1.550" },
+                { name: "Lazulite", range: "1.615" },
+                { name: "Lead", range: "2.010" },
+                { name: "Lead Nitrate", range: "1.782" },
+                { name: "Leucite", range: "1.509" },
+                { name: "Light Flint Glass", range: "1.575" },
+                { name: "Liquid Carbon Dioxide", range: "1.200" },
+                { name: "Liquid Water (20deg C)", range: "1.333" },
+                { name: "Lucite", range: "1.495" },
+            ],
+            M: [
+                { name: "Magnesite", range: "1.515" },
+                { name: "Malachite", range: "1.655" },
+                { name: "Meerschaum", range: "1.530" },
+                { name: "Mercury (liquid)", range: "1.620" },
+                { name: "Methanol", range: "1.329" },
+                { name: "Milk", range: "1.350" },
+                { name: "Moissanite", range: "2.650 - 2.690" },
+                { name: "Moldavite", range: "1.500" },
+                { name: "Moonstone", range: "1.518 - 1.526" },
+                { name: "Moonstone, Adularia", range: "1.525" },
+                { name: "Moonstone, Albite", range: "1.535" },
+                { name: "Morganite", range: "1.585 - 1.594" },
+                { name: "Mylar", range: "1.650" },
+            ],
+            N: [
+                { name: "Natrolite", range: "1.480" },
+                { name: "Nephrite", range: "1.600" },
+                { name: "Nickel", range: "1.080" },
+                { name: "Nitrogen (gas)", range: "1.000" },
+                { name: "Nitrogen (liq)", range: "1.205" },
+                { name: "Nylon", range: "1.530" },
+            ],
+            O: [
+                { name: "Obsidian", range: "1.486 - 1.500" },
+                { name: "Oil of Wintergreen", range: "1.536" },
+                { name: "Oil, Clove", range: "1.535" },
+                { name: "Oil, Lemon", range: "1.481" },
+                { name: "Oil, Neroli", range: "1.482" },
+                { name: "Oil, Orange", range: "1.473" },
+                { name: "Oil, Safflower", range: "1.466" },
+                { name: "Oil, vegetable (50deg C)", range: "1.470" },
+                { name: "Olivine", range: "1.670" },
+                { name: "Onyx", range: "1.486" },
+                { name: "Onyx Marble", range: "1.486" },
+                { name: "Opal", range: "1.450" },
+                { name: "Opal, Black", range: "1.440 - 1.460" },
+                { name: "Opal, Fire", range: "1.430 - 1.460" },
+                { name: "Opal, White", range: "1.440 - 1.460" },
+                { name: "Oregon Sunstone", range: "1.560 - 1.572" },
+                { name: "Oxygen (gas)", range: "1.000" },
+                { name: "Oxygen (liquid)", range: "1.221" },
+            ],
+            P: [
+                { name: "Padparadja", range: "1.760 - 1.773" },
+                { name: "Painite", range: "1.787" },
+                { name: "Paraffin Wax", range: "1.442 - 1.448" },
+                { name: "Pearl", range: "1.530 - 1.690" },
+                { name: "Periclase", range: "1.740" },
+                { name: "Peristerite", range: "1.525" },
+                { name: "PET", range: "1.575" },
+                { name: "Petalite", range: "1.502" },
+                { name: "PETg", range: "1.570" },
+                { name: "Phenakite", range: "1.650" },
+                { name: "Phosgenite", range: "2.117" },
+                { name: "Plastic", range: "1.460" },
+                { name: "Platinum", range: "2.330" },
+                { name: "Plexiglas", range: "1.500" },
+                { name: "PMMA", range: "1.489 - 1.490" },
+                { name: "Polycarbonate", range: "1.584" },
+                { name: "Polystyrene", range: "1.550" },
+                { name: "Prase", range: "1.540" },
+                { name: "Prasiolite", range: "1.540" },
+                { name: "Prehnite", range: "1.610" },
+                { name: "Proustite", range: "2.790" },
+                { name: "Purpurite", range: "1.840" },
+                { name: "Pyrite", range: "1.810" },
+                { name: "Pyrope", range: "1.740" },
+            ],
+            Q: [
+                { name: "Quartz", range: "1.544 - 1.644" },
+                { name: "Quartz, Fused", range: "1.458" },
+            ],
+            R: [
+                { name: "Rhodizite", range: "1.690" },
+                { name: "Rhodochrisite", range: "1.600" },
+                { name: "Rhodonite", range: "1.735" },
+                { name: "Rock salt", range: "1.516 - 1.544" },
+                { name: "Rubber, Natural", range: "1.519" },
+                { name: "Ruby", range: "1.757 - 1.779" },
+                { name: "Rum, White", range: "1.361" },
+                { name: "Rutile", range: "2.620" },
+            ],
+            S: [
+                { name: "Salt (NaCl)", range: "1.544" },
+                { name: "Sanidine", range: "1.522" },
+                { name: "Sapphire", range: "1.757 - 1.779" },
+                { name: "Sapphire, Star", range: "1.760 - 1.773" },
+                { name: "Scapolite", range: "1.540" },
+                { name: "Scapolite, Yellow", range: "1.555" },
+                { name: "Scheelite", range: "1.920" },
+                { name: "Selenium, Amorphous", range: "2.920" },
+                { name: "Serpentine", range: "1.560" },
+                { name: "Shampoo", range: "1.362" },
+                { name: "Shell", range: "1.530" },
+                { name: "Shower gel", range: "1.510" },
+                { name: "Silicon", range: "4.010 - 4.240" },
+                { name: "Sillimanite", range: "1.658" },
+                { name: "Silver", range: "0.180 - 1.350" },
+                { name: "Sinhalite", range: "1.699" },
+                { name: "Smaragdite", range: "1.608" },
+                { name: "Smithsonite", range: "1.621" },
+                { name: "Sodalite", range: "1.483" },
+                { name: "Sodium Chloride", range: "1.544 - 1.644" },
+                { name: "Spessarite", range: "1.790 - 1.810" },
+                { name: "Sphalerite", range: "2.368" },
+                { name: "Sphene", range: "1.885" },
+                { name: "Spinel", range: "1.712 - 1.717" },
+                { name: "Spinel, Blue", range: "1.712 - 1.747" },
+                { name: "Spinel, Red", range: "1.708 - 1.735" },
+                { name: "Spodumene", range: "1.650" },
+                { name: "Star Ruby", range: "1.760 - 1.773" },
+                { name: "Staurolite", range: "1.739" },
+                { name: "Steatite", range: "1.539" },
+                { name: "Steel", range: "2.500" },
+                { name: "Stichtite", range: "1.520" },
+                { name: "Strontium Titanate", range: "2.410" },
+                { name: "Styrofoam", range: "1.595" },
+                { name: "Styrene", range: "1.519" },
+                { name: "Sugar Solution 30%", range: "1.380" },
+                { name: "Sugar Solution 80%", range: "1.490" },
+                { name: "Sulphur", range: "1.960" },
+                { name: "Synthetic Spinel", range: "1.730" },
+            ],
+            T: [
+                { name: "Taaffeite", range: "1.720" },
+                { name: "Tantalite", range: "2.240" },
+                { name: "Tanzanite", range: "1.692 - 1.700" },
+                { name: "Teflon", range: "1.350 - 1.380" },
+                { name: "Thomsonite", range: "1.530" },
+                { name: "Tiger eye", range: "1.544" },
+                { name: "Tin Iodide", range: "2.106" },
+                { name: "Titanium", range: "2.160" },
+                { name: "Topaz", range: "1.607 - 1.627" },
+                { name: "Topaz, Blue", range: "1.610" },
+                { name: "Topaz, Imperial", range: "1.605 - 1.640" },
+                { name: "Topaz, Pink", range: "1.620" },
+                { name: "Topaz, White", range: "1.630" },
+                { name: "Topaz, Yellow", range: "1.620" },
+                { name: "Tourmaline", range: "1.603 - 1.655" },
+                { name: "Tourmaline, Blue", range: "1.610 - 1.640" },
+                { name: "Tourmaline, Catseye", range: "1.610 - 1.640" },
+                { name: "Tourmaline, Green", range: "1.610 - 1.640" },
+                { name: "Tourmaline, Paraiba", range: "1.610 - 1.650" },
+                { name: "Tourmaline, Red", range: "1.610 - 1.640" },
+                { name: "Tremolite", range: "1.600" },
+                { name: "Tugtupite", range: "1.496" },
+                { name: "Turpentine", range: "1.472" },
+                { name: "Turquoise", range: "1.610 - 1.650" },
+            ],
+            U: [
+                { name: "Ulexite", range: "1.490" },
+                { name: "Uvarovite", range: "1.870" },
+            ],
+            V: [
+                { name: "Vacuum", range: "1.000" },
+                { name: "Variscite", range: "1.550" },
+                { name: "Vivianite", range: "1.580" },
+                { name: "Vodka", range: "1.363" },
+            ],
+            W: [
+                { name: "Wardite", range: "1.590" },
+                { name: "Water (0 deg C)", range: "1.333" },
+                { name: "Water (100 deg C)", range: "1.318" },
+                { name: "Water (20 deg C)", range: "1.333" },
+                { name: "Water (gas)", range: "1.000" },
+                { name: "Water (35 deg C)", range: "1.325" },
+                { name: "Water Ice", range: "1.310" },
+                { name: "Wax (paraffin)", range: "1.442 - 1.448" },
+                { name: "Whisky", range: "1.356" },
+                { name: "Wulfenite", range: "2.300" },
+            ],
+            Z: [
+                { name: "Zinc Crown Glass", range: "1.517" },
+                { name: "Zincite", range: "2.010" },
+                { name: "Zircon", range: "1.777 - 1.987" },
+                { name: "Zircon, High", range: "1.960" },
+                { name: "Zircon, Low", range: "1.800" },
+                { name: "Zirconia, Cubic", range: "2.173 - 2.210" },
+            ],
+            // Add more categories and materials here
+        };
+
+        function createCategory(name, items) {
+            const container = document.createElement("div");
+
+            const header = document.createElement("div");
+            header.classList.add("category-header");
+            header.textContent = `${name} - Materials`;
+
+            const list = document.createElement("div");
+            list.classList.add("hidden", "category-content");
+
+            items.forEach(item => {
+                const materialDiv = document.createElement("div");
+                materialDiv.innerHTML = `<span>${item.name}</span> <span>${item.range}</span>`;
+                list.appendChild(materialDiv);
+            });
+
+            header.addEventListener("click", () => {
+                list.classList.toggle("hidden");
+            });
+
+            container.appendChild(header);
+            container.appendChild(list);
+
+            return container;
+        }
+
+        const container = document.getElementById("materials-container");
+        Object.entries(materials).forEach(([category, items]) => {
+            container.appendChild(createCategory(category, items));
+        });
+
+        const search = document.getElementById("search");
+        search.addEventListener("input", () => {
+            const query = search.value.toLowerCase();
+            document.querySelectorAll(".category-header").forEach(header => {
+                const list = header.nextElementSibling;
+                const materials = list.querySelectorAll("div");
+
+                let hasMatch = false;
+                materials.forEach(material => {
+                    const text = material.textContent.toLowerCase();
+                    if (text.includes(query)) {
+                        material.style.display = "flex";
+                        hasMatch = true;
+                    } else {
+                        material.style.display = "none";
+                    }
+                });
+
+                if (hasMatch || query === "") {
+                    header.parentElement.style.display = "block";
+                    if (hasMatch) {
+                        list.classList.remove("hidden");
+                    } else {
+                        list.classList.add("hidden");
+                    }
+                } else {
+                    header.parentElement.style.display = "none";
+                }
+            });
+        });
+    </script>
+</body>
+</html>
